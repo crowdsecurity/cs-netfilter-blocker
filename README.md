@@ -19,8 +19,9 @@ Please find the documentation [here](https://docs.crowdsec.net/blockers/netfilte
 # How it works
 
 When the `netfilter-blocker` service starts, it :
- - Adds a `crowdsec-blacklists` ipset
- - Inserts an `INPUT` rule for match-set `crowdsec-blacklists` with target `DROP`
+ - Create a `crowdsec-blacklists` ipset list for IPv4 address
+ - Create a `crowdsec6-blacklists` ipset list for IPv6 address
+ - Inserts an `INPUT` rule for match-set both `crowdsec-blacklists` and `crowdsec6-blacklists` with target `DROP`
  
 The `netfilter-blocker` daemon will periodically pull the local database content and insert/update bans into the created `ipset`.
 
