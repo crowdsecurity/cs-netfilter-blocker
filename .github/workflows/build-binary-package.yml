@@ -22,12 +22,6 @@ jobs:
         jsonver=$(cat RELEASE.json | jq -r .Version)
         lasttag=$(git for-each-ref --sort=-v:refname --count=1 --format '%(refname)'  | cut -d '/' -f3)
         if [ ${jsonver} != ${lasttag} ] ; then echo "version mismatch : ${jsonver} in json, ${lasttag} in git" ; exit 2 ; else echo "${jsonver} == ${lasttag}" ; fi
-    - name: Load ssh key
-      uses: webfactory/ssh-agent@v0.2.0
-      with:
-        ssh-private-key: ${{ secrets.GOGET_SSH_KEY }}
-    - name: Git config, use private deploy key for go get
-      run: git config --global url."git@github.com:".insteadOf "https://github.com/"
     - name: Build the binaries
       run: make release
     - name: Upload to release

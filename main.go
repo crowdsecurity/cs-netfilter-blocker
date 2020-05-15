@@ -12,8 +12,8 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	"github.com/crowdsecurity/crowdwatch/pkg/sqlite"
-	"github.com/crowdsecurity/crowdwatch/pkg/types"
+	"github.com/crowdsecurity/crowdsec/pkg/sqlite"
+	"github.com/crowdsecurity/crowdsec/pkg/types"
 	"gopkg.in/natefinch/lumberjack.v2"
 
 	"github.com/sevlyar/go-daemon"
@@ -48,7 +48,6 @@ type ipset struct {
 	ShutdownCmds     []string //-D INPUT -m set --match-set myset src -j DROP
 	CheckIptableCmds []string
 }
-
 
 var (
 	modeCtx  ipset
@@ -290,7 +289,6 @@ func main() {
 		log.Fatalf("Startup failed")
 	}
 
-
 	if err := modeCtx6.shutDown(); err != nil {
 		log.Fatalf("Startup6 failed")
 	}
@@ -302,7 +300,6 @@ func main() {
 	if config.Daemon == true {
 
 		go run(dbCTX, &modeCtx, &modeCtx6, config.update_frequency)
-
 
 		daemon.SetSigHandler(termHandler, syscall.SIGTERM)
 		//daemon.SetSigHandler(ReloadHandler, syscall.SIGHUP)
