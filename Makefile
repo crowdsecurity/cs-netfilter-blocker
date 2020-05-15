@@ -1,4 +1,5 @@
 # Go parameters
+export BUILD_VERSION=$(shell cat RELEASE.json | jq -r .Version)
 GOCMD=go
 GOBUILD=GOPRIVATE="github.com/crowdsecurity" $(GOCMD) build
 GOCLEAN=$(GOCMD) clean
@@ -25,7 +26,7 @@ clean:
 	@rm -f $(BINARY_NAME)
 
 
-RELDIR = cs-netfilter-blocker
+RELDIR = "cs-netfilter-blocker-${BUILD_VERSION}"
 
 .PHONY: release
 release: build
