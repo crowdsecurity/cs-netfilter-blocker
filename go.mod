@@ -6,7 +6,7 @@ require (
 	github.com/antonmedv/expr v1.8.2
 	github.com/coreos/go-etcd v2.0.0+incompatible // indirect
 	github.com/cpuguy83/go-md2man v1.0.10 // indirect
-	github.com/crowdsecurity/crowdwatch v0.0.19
+	github.com/crowdsecurity/crowdsec v0.0.1
 	github.com/davecgh/go-spew v1.1.1
 	github.com/denisbrodbeck/machineid v1.0.1
 	github.com/dghubble/sling v1.3.0
