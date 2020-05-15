@@ -1,0 +1,8 @@
+mode: ipset
+dbpath: /var/lib/crowdsec/data/crowdwatch.db
+piddir: /var/run/
+update_frequency: 10s
+daemonize: true
+log_mode: file
+log_dir: /var/log/
+
