@@ -93,7 +93,7 @@ func run(dbCTX *sqlite.Context, modeCtx *ipset, modeCtx6 *ipset, frequency time.
 			done = true
 		}
 		if !done {
-			log.Fatalf("Failed inserting ban: ip %s was not recognised", ba)
+			log.Fatalf("Failed inserting ban: ip %s was not recognised", ba.IpText)
 		}
 	}
 	/*go for loop*/
@@ -144,7 +144,7 @@ func run(dbCTX *sqlite.Context, modeCtx *ipset, modeCtx6 *ipset, frequency time.
 				done = true
 			}
 			if !done {
-				log.Fatalf("Failed inserting ban: ip %s was not recognised", ba)
+				log.Fatalf("Failed inserting ban: ip %s was not recognised", ba.IpText)
 			}
 		}
 
@@ -179,7 +179,7 @@ func run(dbCTX *sqlite.Context, modeCtx *ipset, modeCtx6 *ipset, frequency time.
 				done = true
 			}
 			if !done {
-				log.Fatalf("Failed inserting ban: ip %s was not recognised", ba)
+				log.Fatalf("Failed inserting ban: ip %s was not recognised", ba.IpText)
 			}
 		}
 		lastTS = time.Now()
