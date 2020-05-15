@@ -39,5 +39,5 @@ release: build
 	@cp uninstall.sh $(RELDIR)/
 	@chmod +x $(RELDIR)/install.sh
 	@chmod +x $(RELDIR)/uninstall.sh
-	@tar cvzf $(RELDIR).tgz $(RELDIR)
+	@tar cvzf cs-netfilter-blocker.tgz $(RELDIR)
 	@rm -rf $(RELDIR)
