@@ -1,5 +1,5 @@
 <p align="center">
-<img src="docs/assets/crowdsec_linux_logo.png" alt="CrowdSec" title="CrowdSec" width="250" height="400" />
+<img src="docs/assets/crowdsec_linux_logo.png" alt="CrowdSec" title="CrowdSec" width="280" height="400" />
 </p>
 <p align="center">
 <img src="https://img.shields.io/badge/build-pass-green">
