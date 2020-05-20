@@ -7,7 +7,7 @@
 </p>
 <p align="center">
 :books: <a href="https://docs.crowdsec.net/blockers/netfilter/installation/">Documentation</a>
-&#1F4A0 <a href="https://hub.crowdsec.net">Hub</a>
+&#1F4A0; <a href="https://hub.crowdsec.net">Hub</a>
 :speech_balloon: <a href="https://discourse.crowdsec.net">Discourse </a>
 </p>
 
