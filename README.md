@@ -6,9 +6,9 @@
 <img src="https://img.shields.io/badge/tests-pass-green">
 </p>
 <p align="center">
-:books: <a href="https://docs.crowdsec.net/blockers/netfilter/installation/">Documentation</a>
-:diamond_shape_with_a_dot_inside: <a href="https://hub.crowdsec.net">Hub</a>
-:speech_balloon: <a href="https://discourse.crowdsec.net">Discourse </a>
+&#x1F4DA; <a href="https://docs.crowdsec.net/blockers/netfilter/installation/">Documentation</a>
+&#x1F4A0; <a href="https://hub.crowdsec.net">Hub</a>
+&#128172; <a href="https://discourse.crowdsec.net">Discourse </a>
 </p>
 
 # CrowdSec Netfilter Blocker
