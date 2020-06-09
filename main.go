@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"os"
-	"os/exec"
 	"syscall"
 
 	"github.com/sevlyar/go-daemon"
@@ -114,18 +113,4 @@ func main() {
 		backend.Run(dbCTX, config.updateFrequency)
 	}
 
-}
-
-func (ipset *ipTablesContext) DeleteBan(ban types.BanApplication) error {
-	/*
-		ipset -exist delete test 192.168.0.1 timeout 600
-		ipset -exist add test 192.168.0.1 timeout 600
-	*/
-	log.Infof("ipset del ban for [%s]", ban.IpText)
-	cmd := exec.Command(ipset.ipsetBin, "-exist", "del", ipset.SetName, ban.IpText)
-	if out, err := cmd.CombinedOutput(); err != nil {
-		log.Infof("Error while deleting from set (%s): %v --> %s", cmd.String(), err, string(out))
-	}
-	//ipset -exist add test 192.168.0.1 timeout 600
-	return nil
 }
