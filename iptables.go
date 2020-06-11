@@ -18,7 +18,7 @@ type iptables struct {
 
 var iptablesCtx = &iptables{}
 
-func NewIPTables() (interface{}, error) {
+func newIPTables() (interface{}, error) {
 	var err error
 	ipv4Ctx := &ipTablesContext{
 		Name:             "ipset",

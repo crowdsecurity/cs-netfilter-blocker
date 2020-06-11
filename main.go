@@ -24,7 +24,7 @@ type mode interface {
 var config *blockerConfig
 
 func termHandler(sig os.Signal) error {
-	backend, err := NewBackend(config.Mode)
+	backend, err := newBackend(config.Mode)
 	if err != nil {
 		log.Fatalf("backend shutdown init failed: %s", err)
 	}
@@ -71,7 +71,7 @@ func main() {
 		log.Fatalf("unable to init sqlite : %v", err)
 	}
 
-	backend, err := NewBackend(config.Mode)
+	backend, err := newBackend(config.Mode)
 	if err != nil {
 		log.Fatalf(err.Error())
 	}

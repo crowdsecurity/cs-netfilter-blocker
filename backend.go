@@ -42,12 +42,12 @@ func (b *backendCtx) ShutDown() error {
 	return nil
 }
 
-func NewBackend(backendType string) (*backendCtx, error) {
+func newBackend(backendType string) (*backendCtx, error) {
 	var ok bool
 	ctx := &backendCtx{}
 	log.Printf("backend type : %s", backendType)
 	if backendType == "iptables" {
-		tmpCtx, err := NewIPTables()
+		tmpCtx, err := newIPTables()
 		if err != nil {
 			return nil, err
 		}
