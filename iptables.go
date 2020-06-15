@@ -155,7 +155,7 @@ func (ipt *iptables) Run(dbCTX *sqlite.Context, frequency time.Duration) error {
 	lastTS := time.Now()
 	/*start by getting valid bans in db ^^ */
 	log.Infof("fetching existing bans from DB")
-	bansToAdd, err := getNewBan(dbCTX)
+	bansToAdd, err := getNewBan(dbCTX, time.Time{})
 	if err != nil {
 		return err
 	}
@@ -192,7 +192,8 @@ func (ipt *iptables) Run(dbCTX *sqlite.Context, frequency time.Duration) error {
 			}
 		}
 
-		bansToAdd, err := getNewBan(dbCTX)
+		bansToAdd, err := getNewBan(dbCTX, lastTS)
+		lastTS = time.Now()
 		if err != nil {
 			return err
 		}
@@ -203,6 +204,5 @@ func (ipt *iptables) Run(dbCTX *sqlite.Context, frequency time.Duration) error {
 				return err
 			}
 		}
-		lastTS = time.Now()
 	}
 }

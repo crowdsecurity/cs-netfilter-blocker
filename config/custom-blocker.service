@@ -1,11 +1,10 @@
 [Unit]
-Description=The crowdsec netfilter connector
+Description=The crowdsec custom connector
 After=syslog.target network.target remote-fs.target nss-lookup.target
 
 [Service]
 Type=forking
-#PIDFile=${PID}/crowdsec-netfilter.pid
-ExecStart=${BIN} -c ${CFG}/netfilter-blocker.yaml
+ExecStart=${BIN} -c ${CFG}/custom-blocker.yaml
 ExecStartPost=/bin/sleep 0.1
 
 [Install]

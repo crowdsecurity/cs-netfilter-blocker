@@ -53,8 +53,8 @@ func (ipt *CustomScript) Init() error {
 }
 
 func (ipt *CustomScript) AddBan(ban types.BanApplication) error {
-	log.Printf("custom [%s] : add ban on %s until %s (%s)", ipt.CustomPath, ban.IpText, ban.Until, ban.Reason)
 	banDuration := fmt.Sprintf("%d", int(ban.Until.Sub(time.Now()).Seconds()))
+	log.Printf("custom [%s] : add ban on %s for %s sec (%s)", ipt.CustomPath, ban.IpText, banDuration, ban.Reason)
 
 	str, err := serializeBanApplication(ban)
 	if err != nil {
@@ -92,7 +92,7 @@ func (ipt *CustomScript) Run(dbCTX *sqlite.Context, frequency time.Duration) err
 	lastTS := time.Now()
 	/*start by getting valid bans in db ^^ */
 	log.Infof("fetching existing bans from DB")
-	bansToAdd, err := getNewBan(dbCTX)
+	bansToAdd, err := getNewBan(dbCTX, time.Time{})
 	if err != nil {
 		return err
 	}
@@ -122,10 +122,12 @@ func (ipt *CustomScript) Run(dbCTX *sqlite.Context, frequency time.Duration) err
 			}
 		}
 
-		bansToAdd, err := getNewBan(dbCTX)
+		bansToAdd, err := getNewBan(dbCTX, lastTS)
 		if err != nil {
 			return err
 		}
+		lastTS = time.Now()
+
 		fmt.Printf("Adding ban")
 		for idx, ba := range bansToAdd {
 			log.Debugf("ban %d/%d", idx, len(bansToAdd))
@@ -133,6 +135,5 @@ func (ipt *CustomScript) Run(dbCTX *sqlite.Context, frequency time.Duration) err
 				return err
 			}
 		}
-		lastTS = time.Now()
 	}
 }

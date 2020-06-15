@@ -37,7 +37,7 @@ func termHandler(sig os.Signal) error {
 func main() {
 	var err error
 
-	configPath := flag.String("c", "", "path to netfilter-connector.yaml")
+	configPath := flag.String("c", "", "path to custom-connector.yaml")
 	flag.Parse()
 
 	if configPath == nil || *configPath == "" {
@@ -55,7 +55,7 @@ func main() {
 			config.LogDir = "/var/log/"
 		}
 		log.SetOutput(&lumberjack.Logger{
-			Filename:   config.LogDir + "/netfilter-blocker.log",
+			Filename:   config.LogDir + "/custom-blocker.log",
 			MaxSize:    500, //megabytes
 			MaxBackups: 3,
 			MaxAge:     28,   //days
@@ -89,7 +89,7 @@ func main() {
 		//daemon.SetSigHandler(ReloadHandler, syscall.SIGHUP)
 
 		dctx := &daemon.Context{
-			PidFileName: config.PidDir + "/netfilter-blocker.pid",
+			PidFileName: config.PidDir + "/custom-blocker.pid",
 			PidFilePerm: 0644,
 			WorkDir:     "./",
 			Umask:       027,

@@ -40,8 +40,6 @@ func NewConfig(configPath string) (*blockerConfig, error) {
 	if config.Dbpath == "" || config.Mode == "" || config.PidDir == "" || config.LogMode == "" {
 		return nil, fmt.Errorf("invalid configuration in %s", configPath)
 	}
-	// if config.Mode == "custom" && config.CustomPath == "" {
-	// 	return nil, fmt.Errorf("'custom' mode requires path to custom script")
-	// }
+
 	return config, nil
 }

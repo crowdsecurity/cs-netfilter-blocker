@@ -59,7 +59,7 @@ func newBackend(config *blockerConfig) (*backendCtx, error) {
 			return nil, fmt.Errorf("interface iptables is not good")
 		}
 		return ctx, nil
-	case "custom_script":
+	case "custom":
 		tmpCtx, err := newCustomScript(config)
 		if err != nil {
 			return nil, err

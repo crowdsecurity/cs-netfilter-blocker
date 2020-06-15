@@ -1,4 +1,5 @@
-mode: ipset
+mode: custom
+custom_path: /tmp/test/demo.sh
 dbpath: /var/lib/crowdsec/data/crowdsec.db
 piddir: /var/run/
 update_frequency: 10s
