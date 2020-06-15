@@ -42,12 +42,15 @@ func (b *backendCtx) ShutDown() error {
 	return nil
 }
 
-func newBackend(backendType string) (*backendCtx, error) {
+func newBackend(config *blockerConfig) (*backendCtx, error) {
 	var ok bool
 	ctx := &backendCtx{}
+	backendType := config.Mode
 	log.Printf("backend type : %s", backendType)
-	if backendType == "iptables" {
-		tmpCtx, err := newIPTables()
+
+	switch backendType {
+	case "iptables":
+		tmpCtx, err := newIPTables(config)
 		if err != nil {
 			return nil, err
 		}
@@ -55,6 +58,18 @@ func newBackend(backendType string) (*backendCtx, error) {
 		if !ok {
 			return nil, fmt.Errorf("interface iptables is not good")
 		}
+		return ctx, nil
+	case "custom_script":
+		tmpCtx, err := newCustomScript(config)
+		if err != nil {
+			return nil, err
+		}
+		ctx.ctx, ok = tmpCtx.(backend)
+		if !ok {
+			return nil, fmt.Errorf("interface CustomScript is not good")
+		}
+		return ctx, nil
 	}
-	return ctx, nil
+
+	return nil, fmt.Errorf("unknown backend %s", backendType)
 }

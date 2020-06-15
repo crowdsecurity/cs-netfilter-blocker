@@ -9,7 +9,8 @@ import (
 )
 
 type blockerConfig struct {
-	Mode                string `yaml:"mode"`   //ipset,iptables,tc
+	Mode                string `yaml:"mode"` //ipset,iptables,custom
+	CustomPath          string `yaml:"custom_path,omitempty"`
 	Dbpath              string `yaml:"dbpath"` ///var/run/crowdsec/crowdsec-agent.db
 	PidDir              string `yaml:"piddir"`
 	updateFrequency     time.Duration
@@ -39,6 +40,8 @@ func NewConfig(configPath string) (*blockerConfig, error) {
 	if config.Dbpath == "" || config.Mode == "" || config.PidDir == "" || config.LogMode == "" {
 		return nil, fmt.Errorf("invalid configuration in %s", configPath)
 	}
-
+	// if config.Mode == "custom" && config.CustomPath == "" {
+	// 	return nil, fmt.Errorf("'custom' mode requires path to custom script")
+	// }
 	return config, nil
 }

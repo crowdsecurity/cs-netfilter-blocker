@@ -9,7 +9,7 @@ GOGET=$(GOCMD) get
 
 PREFIX?="/"
 PID_DIR = $(PREFIX)"/var/run/"
-BINARY_NAME=netfilter-blocker
+BINARY_NAME=custom-blocker
 
 all: clean test build
 
@@ -26,7 +26,7 @@ clean:
 	@rm -f $(BINARY_NAME)
 
 
-RELDIR = "cs-netfilter-blocker-${BUILD_VERSION}"
+RELDIR = "cs-custom-blocker-${BUILD_VERSION}"
 
 .PHONY: release
 release: build
@@ -39,5 +39,5 @@ release: build
 	@cp uninstall.sh $(RELDIR)/
 	@chmod +x $(RELDIR)/install.sh
 	@chmod +x $(RELDIR)/uninstall.sh
-	@tar cvzf cs-netfilter-blocker.tgz $(RELDIR)
+	@tar cvzf cs-custom-blocker.tgz $(RELDIR)
 	@rm -rf $(RELDIR)
