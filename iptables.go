@@ -192,7 +192,7 @@ func (ipt *iptables) Run(dbCTX *sqlite.Context, frequency time.Duration) error {
 			}
 		}
 
-		bansToAdd, err := getNewBan(dbCTX)
+		bansToAdd, err := getLastBan(dbCTX, lastTS)
 		if err != nil {
 			return err
 		}
