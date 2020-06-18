@@ -49,6 +49,27 @@ func main() {
 		log.Fatalf("unable to load configuration: %s", err)
 	}
 
+	//daemon.SetSigHandler(ReloadHandler, syscall.SIGHUP)
+
+	dctx := &daemon.Context{
+		PidFileName: config.PidDir + "/netfilter-blocker.pid",
+		PidFilePerm: 0644,
+		WorkDir:     "./",
+		Umask:       027,
+	}
+
+	if config.Daemon {
+		daemon.SetSigHandler(termHandler, syscall.SIGTERM)
+
+		d, err := dctx.Reborn()
+		if err != nil {
+			log.Fatal("Unable to run: ", err)
+		}
+		if d != nil {
+			return
+		}
+	}
+
 	/*Configure logging*/
 	if config.LogMode == "file" {
 		if config.LogDir == "" {
@@ -85,29 +106,12 @@ func main() {
 
 		go backend.Run(dbCTX, config.updateFrequency)
 
-		daemon.SetSigHandler(termHandler, syscall.SIGTERM)
-		//daemon.SetSigHandler(ReloadHandler, syscall.SIGHUP)
-
-		dctx := &daemon.Context{
-			PidFileName: config.PidDir + "/netfilter-blocker.pid",
-			PidFilePerm: 0644,
-			WorkDir:     "./",
-			Umask:       027,
-		}
-
-		d, err := dctx.Reborn()
-		if err != nil {
-			log.Fatal("Unable to run: ", err)
-		}
-		if d != nil {
-			return
-		}
 		defer dctx.Release()
 
 		/*if we are into daemon mode, only process signals*/
 		err = daemon.ServeSignals()
 		if err != nil {
-			log.Errorf("Error: %s", err.Error())
+			log.Fatalf("error running daemon: %s", err.Error())
 		}
 	} else {
 		backend.Run(dbCTX, config.updateFrequency)
