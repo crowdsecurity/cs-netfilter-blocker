@@ -196,7 +196,6 @@ func (ipt *iptables) Run(dbCTX *sqlite.Context, frequency time.Duration) error {
 		if err != nil {
 			return err
 		}
-		fmt.Printf("Adding ban")
 		for idx, ba := range bansToAdd {
 			log.Debugf("ban %d/%d", idx, len(bansToAdd))
 			if err := ipt.AddBan(ba); err != nil {
