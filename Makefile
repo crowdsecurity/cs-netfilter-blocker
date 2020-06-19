@@ -1,5 +1,5 @@
 # Go parameters
-export BUILD_VERSION=$(shell cat RELEASE.json | jq -r .Version)
+BUILD_VERSION?="$(shell git for-each-ref --sort=-v:refname --count=1 --format '%(refname)'  | cut -d '/' -f3)"
 GOCMD=go
 GOBUILD=GOPRIVATE="github.com/crowdsecurity" $(GOCMD) build
 GOCLEAN=$(GOCMD) clean
