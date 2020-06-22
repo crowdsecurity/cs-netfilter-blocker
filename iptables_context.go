@@ -57,7 +57,7 @@ func (ctx *ipTablesContext) CheckAndCreate() error {
 func (ctx *ipTablesContext) addBan(ban types.BanApplication) error {
 	/*Create our set*/
 	banDuration := int(ban.Until.Sub(time.Now()).Seconds())
-	log.Debugf("ipset ban [%s] for %d seconds (until: %s)", ban.IpText, banDuration, ban.Until)
+	log.Infof("ipset del ban for [%s] (%d seconds)", ban.IpText, banDuration)
 	cmd := exec.Command(ctx.ipsetBin, "-exist", "add", ctx.SetName, ban.IpText, "timeout", fmt.Sprintf("%d", banDuration))
 	log.Debugf("ipset add : %s", cmd.String())
 	if out, err := cmd.CombinedOutput(); err != nil {
