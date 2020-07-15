@@ -49,6 +49,11 @@ func main() {
 		log.Fatalf("unable to load configuration: %s", err)
 	}
 
+	// Configure logging
+	if err = types.SetDefaultLoggerConfig(config.LogMode, config.LogDir, config.LogLevel); err != nil {
+		log.Fatal(err.Error())
+	}
+
 	//daemon.SetSigHandler(ReloadHandler, syscall.SIGHUP)
 
 	dctx := &daemon.Context{

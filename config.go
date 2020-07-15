@@ -5,6 +5,8 @@ import (
 	"io/ioutil"
 	"time"
 
+	log "github.com/sirupsen/logrus"
+
 	"gopkg.in/yaml.v2"
 )
 
@@ -13,11 +15,11 @@ type blockerConfig struct {
 	Dbpath              string `yaml:"dbpath"` ///var/run/crowdsec/crowdsec-agent.db
 	PidDir              string `yaml:"piddir"`
 	updateFrequency     time.Duration
-	UpdateFrequencyYAML string `yaml:"update_frequency"`
-	Daemon              bool   `yaml:"daemonize"`
-	LogMode             string `yaml:"log_mode"`
-	LogDir              string `yaml:"log_dir"`
-	LogLevel            string `yaml:"log_level"`
+	UpdateFrequencyYAML string    `yaml:"update_frequency"`
+	Daemon              bool      `yaml:"daemonize"`
+	LogMode             string    `yaml:"log_mode"`
+	LogDir              string    `yaml:"log_dir"`
+	LogLevel            log.Level `yaml:"log_level"`
 
 	DBConfig map[string]string `yaml:"db_config"`
 }
