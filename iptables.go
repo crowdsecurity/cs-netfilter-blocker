@@ -162,6 +162,9 @@ func (ipt *iptables) Run(dbCTX *database.Context, frequency time.Duration) error
 	}
 	log.Infof("found %d bans in DB", len(bansToAdd))
 	for idx, ba := range bansToAdd {
+		if strings.HasPrefix(ba.MeasureType, "simulation:") {
+			log.Debugf("measure against '%s' is in simulation mode, skipping it", ba.IpText)
+		}
 		log.Debugf("ban %d/%d", idx, len(bansToAdd))
 		if err := ipt.AddBan(ba); err != nil {
 			return err
@@ -193,13 +196,15 @@ func (ipt *iptables) Run(dbCTX *database.Context, frequency time.Duration) error
 				return err
 			}
 		}
-		log.Printf("Getting new bans !!!")
 		bansToAdd, err := dbCTX.GetNewBanSince(lastAddTS)
 		if err != nil {
 			return err
 		}
 		lastAddTS = time.Now()
 		for idx, ba := range bansToAdd {
+			if strings.HasPrefix(ba.MeasureType, "simulation:") {
+				log.Debugf("measure against '%s' is in simulation mode, skipping it", ba.IpText)
+			}
 			log.Debugf("ban %d/%d", idx, len(bansToAdd))
 			if err := ipt.AddBan(ba); err != nil {
 				return err
