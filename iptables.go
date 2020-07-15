@@ -152,7 +152,8 @@ func (ipt *iptables) DeleteBan(ban types.BanApplication) error {
 
 func (ipt *iptables) Run(dbCTX *database.Context, frequency time.Duration) error {
 
-	lastTS := time.Now()
+	lastDelTS := time.Now()
+	lastAddTS := time.Now()
 	/*start by getting valid bans in db ^^ */
 	log.Infof("fetching existing bans from DB")
 	bansToAdd, err := dbCTX.GetNewBan()
@@ -178,12 +179,13 @@ func (ipt *iptables) Run(dbCTX *database.Context, frequency time.Duration) error
 		}
 		time.Sleep(frequency)
 
-		bas, err := dbCTX.GetDeletedBanSince(lastTS)
+		bas, err := dbCTX.GetDeletedBanSince(lastDelTS)
 		if err != nil {
 			return err
 		}
+		lastDelTS = time.Now()
 		if len(bas) > 0 {
-			log.Infof("%d bans to flush since %s", len(bas), lastTS)
+			log.Infof("%d bans to flush since %s", len(bas), lastDelTS)
 		}
 		for idx, ba := range bas {
 			log.Debugf("delete ban %d/%d", idx, len(bas))
@@ -191,17 +193,17 @@ func (ipt *iptables) Run(dbCTX *database.Context, frequency time.Duration) error
 				return err
 			}
 		}
-
-		bansToAdd, err := dbCTX.GetNewBanSince(lastTS)
+		log.Printf("Getting new bans !!!")
+		bansToAdd, err := dbCTX.GetNewBanSince(lastAddTS)
 		if err != nil {
 			return err
 		}
+		lastAddTS = time.Now()
 		for idx, ba := range bansToAdd {
 			log.Debugf("ban %d/%d", idx, len(bansToAdd))
 			if err := ipt.AddBan(ba); err != nil {
 				return err
 			}
 		}
-		lastTS = time.Now()
 	}
 }
