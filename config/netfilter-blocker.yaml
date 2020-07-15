@@ -5,6 +5,7 @@ update_frequency: 10s
 daemonize: false
 log_mode: stdout
 log_dir: /var/log/
+log_level: debug
 db_config:
   ## DB type supported (mysql, sqlite)
   ## By default it using sqlite
