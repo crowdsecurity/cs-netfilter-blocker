@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/crowdsecurity/crowdsec/pkg/sqlite"
+	"github.com/crowdsecurity/crowdsec/pkg/database"
 	"github.com/crowdsecurity/crowdsec/pkg/types"
 	log "github.com/sirupsen/logrus"
 )
@@ -150,12 +150,12 @@ func (ipt *iptables) DeleteBan(ban types.BanApplication) error {
 	return nil
 }
 
-func (ipt *iptables) Run(dbCTX *sqlite.Context, frequency time.Duration) error {
+func (ipt *iptables) Run(dbCTX *database.Context, frequency time.Duration) error {
 
 	lastTS := time.Now()
 	/*start by getting valid bans in db ^^ */
 	log.Infof("fetching existing bans from DB")
-	bansToAdd, err := getNewBan(dbCTX)
+	bansToAdd, err := dbCTX.GetNewBan()
 	if err != nil {
 		return err
 	}
@@ -178,7 +178,7 @@ func (ipt *iptables) Run(dbCTX *sqlite.Context, frequency time.Duration) error {
 		}
 		time.Sleep(frequency)
 
-		bas, err := getDeletedBan(dbCTX, lastTS)
+		bas, err := dbCTX.GetDeletedBanSince(lastTS)
 		if err != nil {
 			return err
 		}
@@ -192,7 +192,7 @@ func (ipt *iptables) Run(dbCTX *sqlite.Context, frequency time.Duration) error {
 			}
 		}
 
-		bansToAdd, err := getLastBan(dbCTX, lastTS)
+		bansToAdd, err := dbCTX.GetNewBanSince(lastTS)
 		if err != nil {
 			return err
 		}

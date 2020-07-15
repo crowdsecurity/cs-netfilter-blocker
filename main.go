@@ -8,7 +8,7 @@ import (
 	"github.com/sevlyar/go-daemon"
 	log "github.com/sirupsen/logrus"
 
-	"github.com/crowdsecurity/crowdsec/pkg/sqlite"
+	"github.com/crowdsecurity/crowdsec/pkg/database"
 	"github.com/crowdsecurity/crowdsec/pkg/types"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
@@ -87,7 +87,7 @@ func main() {
 		log.Fatalf("log mode '%s' unknown, expecting 'file' or 'stdout'", config.LogMode)
 	}
 
-	dbCTX, err := sqlite.NewSQLite(map[string]string{"db_path": config.Dbpath})
+	dbCTX, err := database.NewDatabase(config.DBConfig)
 	if err != nil {
 		log.Fatalf("unable to init sqlite : %v", err)
 	}

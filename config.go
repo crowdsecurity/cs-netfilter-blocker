@@ -13,10 +13,11 @@ type blockerConfig struct {
 	Dbpath              string `yaml:"dbpath"` ///var/run/crowdsec/crowdsec-agent.db
 	PidDir              string `yaml:"piddir"`
 	updateFrequency     time.Duration
-	UpdateFrequencyYAML string `yaml:"update_frequency"`
-	Daemon              bool   `yaml:"daemonize"`
-	LogMode             string `yaml:"log_mode"`
-	LogDir              string `yaml:"log_dir"`
+	UpdateFrequencyYAML string            `yaml:"update_frequency"`
+	Daemon              bool              `yaml:"daemonize"`
+	LogMode             string            `yaml:"log_mode"`
+	LogDir              string            `yaml:"log_dir"`
+	DBConfig            map[string]string `yaml:"db_config"`
 }
 
 func NewConfig(configPath string) (*blockerConfig, error) {
