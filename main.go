@@ -94,7 +94,7 @@ func main() {
 
 	dbCTX, err := database.NewDatabase(config.DBConfig)
 	if err != nil {
-		log.Fatalf("unable to init sqlite : %v", err)
+		log.Fatalf("unable to init database : %v", err)
 	}
 
 	backend, err := newBackend(config.Mode)
