@@ -95,6 +95,11 @@ func (ipt *iptables) Init() error {
 func (ipt *iptables) AddBan(ban types.BanApplication) error {
 	done := false
 
+	if strings.HasPrefix(ban.MeasureType, "simulation:") {
+		log.Debugf("measure against '%s' is in simulation mode, skipping it", ban.IpText)
+		return nil
+	}
+
 	//we now have to know if ba is for an ipv4 or ipv6
 	//the obvious way would be to get the len of net.ParseIp(ba) but this is 16 internally even for ipv4.
 	//so we steal the ugly hack from https://github.com/asaskevich/govalidator/blob/3b2665001c4c24e3b076d1ca8c428049ecbb925b/validator.go#L501
@@ -162,9 +167,6 @@ func (ipt *iptables) Run(dbCTX *database.Context, frequency time.Duration) error
 	}
 	log.Infof("found %d bans in DB", len(bansToAdd))
 	for idx, ba := range bansToAdd {
-		if strings.HasPrefix(ba.MeasureType, "simulation:") {
-			log.Debugf("measure against '%s' is in simulation mode, skipping it", ba.IpText)
-		}
 		log.Debugf("ban %d/%d", idx, len(bansToAdd))
 		if err := ipt.AddBan(ba); err != nil {
 			return err
@@ -202,9 +204,6 @@ func (ipt *iptables) Run(dbCTX *database.Context, frequency time.Duration) error
 		}
 		lastAddTS = time.Now()
 		for idx, ba := range bansToAdd {
-			if strings.HasPrefix(ba.MeasureType, "simulation:") {
-				log.Debugf("measure against '%s' is in simulation mode, skipping it", ba.IpText)
-			}
 			log.Debugf("ban %d/%d", idx, len(bansToAdd))
 			if err := ipt.AddBan(ba); err != nil {
 				return err
