@@ -2,7 +2,7 @@ mode: iptables
 dbpath: /var/lib/crowdsec/data/crowdsec.db
 piddir: /var/run/
 update_frequency: 10s
-daemonize: false
+daemonize: true
 log_mode: file
 log_dir: /var/log/
 log_level: info
