@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/crowdsecurity/crowdsec/pkg/sqlite"
+	"github.com/crowdsecurity/crowdsec/pkg/database"
 	log "github.com/sirupsen/logrus"
 )
 
 type backend interface {
 	Init() error
 	ShutDown() error
-	Run(*sqlite.Context, time.Duration) error
+	Run(*database.Context, time.Duration) error
 }
 
 type backendCtx struct {
@@ -26,7 +26,7 @@ func (b *backendCtx) Init() error {
 	return nil
 }
 
-func (b *backendCtx) Run(dbCTX *sqlite.Context, frequency time.Duration) error {
+func (b *backendCtx) Run(dbCTX *database.Context, frequency time.Duration) error {
 	err := b.ctx.Run(dbCTX, frequency)
 	if err != nil {
 		log.Fatalf(err.Error())

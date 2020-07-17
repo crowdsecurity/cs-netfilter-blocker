@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/crowdsecurity/crowdsec/pkg/sqlite"
+	"github.com/crowdsecurity/crowdsec/pkg/database"
 	"github.com/crowdsecurity/crowdsec/pkg/types"
 	log "github.com/sirupsen/logrus"
 )
@@ -95,6 +95,11 @@ func (ipt *iptables) Init() error {
 func (ipt *iptables) AddBan(ban types.BanApplication) error {
 	done := false
 
+	if strings.HasPrefix(ban.MeasureType, "simulation:") {
+		log.Debugf("measure against '%s' is in simulation mode, skipping it", ban.IpText)
+		return nil
+	}
+
 	//we now have to know if ba is for an ipv4 or ipv6
 	//the obvious way would be to get the len of net.ParseIp(ba) but this is 16 internally even for ipv4.
 	//so we steal the ugly hack from https://github.com/asaskevich/govalidator/blob/3b2665001c4c24e3b076d1ca8c428049ecbb925b/validator.go#L501
@@ -150,12 +155,13 @@ func (ipt *iptables) DeleteBan(ban types.BanApplication) error {
 	return nil
 }
 
-func (ipt *iptables) Run(dbCTX *sqlite.Context, frequency time.Duration) error {
+func (ipt *iptables) Run(dbCTX *database.Context, frequency time.Duration) error {
 
-	lastTS := time.Now()
+	lastDelTS := time.Now()
+	lastAddTS := time.Now()
 	/*start by getting valid bans in db ^^ */
 	log.Infof("fetching existing bans from DB")
-	bansToAdd, err := getNewBan(dbCTX)
+	bansToAdd, err := dbCTX.GetNewBan()
 	if err != nil {
 		return err
 	}
@@ -178,12 +184,13 @@ func (ipt *iptables) Run(dbCTX *sqlite.Context, frequency time.Duration) error {
 		}
 		time.Sleep(frequency)
 
-		bas, err := getDeletedBan(dbCTX, lastTS)
+		bas, err := dbCTX.GetDeletedBanSince(lastDelTS)
 		if err != nil {
 			return err
 		}
+		lastDelTS = time.Now()
 		if len(bas) > 0 {
-			log.Infof("%d bans to flush since %s", len(bas), lastTS)
+			log.Infof("%d bans to flush since %s", len(bas), lastDelTS)
 		}
 		for idx, ba := range bas {
 			log.Debugf("delete ban %d/%d", idx, len(bas))
@@ -191,17 +198,16 @@ func (ipt *iptables) Run(dbCTX *sqlite.Context, frequency time.Duration) error {
 				return err
 			}
 		}
-
-		bansToAdd, err := getLastBan(dbCTX, lastTS)
+		bansToAdd, err := dbCTX.GetNewBanSince(lastAddTS)
 		if err != nil {
 			return err
 		}
+		lastAddTS = time.Now()
 		for idx, ba := range bansToAdd {
 			log.Debugf("ban %d/%d", idx, len(bansToAdd))
 			if err := ipt.AddBan(ba); err != nil {
 				return err
 			}
 		}
-		lastTS = time.Now()
 	}
 }

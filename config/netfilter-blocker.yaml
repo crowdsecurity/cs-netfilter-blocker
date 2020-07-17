@@ -2,7 +2,24 @@ mode: iptables
 dbpath: /var/lib/crowdsec/data/crowdsec.db
 piddir: /var/run/
 update_frequency: 10s
-daemonize: true
+daemonize: false
 log_mode: file
 log_dir: /var/log/
+log_level: info
+db_config:
+  ## DB type supported (mysql, sqlite)
+  ## By default it using sqlite
+  type: sqlite
 
+  ## mysql options
+  # db_host: localhost
+  # db_username: crowdsec
+  # db_password: crowdsec
+  # db_name: crowdsec
+
+  ## sqlite options
+  db_path: /var/lib/crowdsec/data/crowdsec.db
+
+  ## Other options
+  flush: true
+  # debug: true
