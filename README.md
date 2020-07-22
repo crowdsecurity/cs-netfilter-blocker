@@ -13,9 +13,17 @@
 
 # CrowdSec Netfilter Blocker
 
-This repository contains a netfilter-blocker, written in golang, that will bans IP address tagged as malevolent in the SQLite database.
+A netfilter blocker relying on `iptables` and `ipset`.
 
-## Installation
+# How does it work ?
+
+The netfilter-blocker will monitor bans from SQLite or MySQL database (fed by crowdsec), and update a set of banned IPs / ranges.
+
+# Installation
+
+netfilter-blocker requires `ipset` and `iptables`, and defaults to SQLite backend type.
+
+## Install script
 
 Download the [latest release](https://github.com/crowdsecurity/cs-netfilter-blocker/releases).
 
@@ -23,11 +31,93 @@ Download the [latest release](https://github.com/crowdsecurity/cs-netfilter-bloc
 tar xzvf cs-netfilter-blocker.tgz
 cd cs-netfilter-blocker/
 sudo ./install.sh
+systemctl status netfilter-blocker
 ```
 
-## Documentation
+## From source
 
-Please find the documentation [here](https://docs.crowdsec.net/blockers/netfilter/installation/).
+:warning: requires  go >= 1.13
+
+```bash
+make release
+tar xvzf cs-netfilter-blocker.tgz
+cd cs-netfilter-blocker-vX.X.X
+sudo ./install.sh
+```
+
+
+# Configuration
+
+Configuration can be found in `/etc/crowdsec/netfilter-blocker/netfilter-blocker.yaml`.
+The default is to use SQLite as a backend :
+
+```yaml
+# only supported mode is iptables
+mode: iptables
+piddir: /var/run/
+# how often we check for updates
+update_frequency: 10s
+# go to background
+daemonize: true
+# stdout or file
+log_mode: file
+log_dir: /var/log/
+log_level: info
+db_config:
+  ## DB type supported (mysql, sqlite)
+  ## By default it using sqlite
+  type: sqlite
+
+  ## mysql options
+  # db_host: localhost
+  # db_username: crowdsec
+  # db_password: crowdsec
+  # db_name: crowdsec
+
+  ## sqlite options
+  db_path: /var/lib/crowdsec/data/crowdsec.db
+
+  ## Other options
+  flush: true
+  # debug: true
+
+```
+
+<details>
+  <summary>MySQL configuration</summary>
+
+```yaml
+# only supported mode is iptables
+mode: iptables
+piddir: /var/run/
+# how often we check for updates
+update_frequency: 10s
+# go to background
+daemonize: true
+# stdout or file
+log_mode: file
+log_dir: /var/log/
+log_level: info
+db_config:
+  ## DB type supported (mysql, sqlite)
+  ## By default it using sqlite
+  type: mysql
+
+  ## mysql options
+  db_host: localhost
+  db_username: crowdsec
+  db_password: crowdsec
+  db_name: crowdsec
+
+  ## sqlite options
+  #db_path: /var/lib/crowdsec/data/crowdsec.db
+
+  ## Other options
+  flush: true
+  # debug: true
+
+```
+</details>
 
 # How it works
 
@@ -45,6 +135,6 @@ The `netfilter-blocker` daemon will periodically pull the local database content
 # Troubleshooting
 
  - Logs are in `/var/log/netfilter-blocker.log`
- - You can view/interact directly in the ban list either with `cwcli` or direct at ipset level
+ - You can view/interact directly in the ban list either with `cscli` or direct at ipset level
  - Service can be started/stopped with `systemctl start/stop netfilter-blocker`
 
