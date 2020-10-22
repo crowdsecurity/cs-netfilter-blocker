@@ -39,10 +39,11 @@ systemctl status netfilter-blocker
 :warning: requires  go >= 1.13
 
 ```bash
+git clone https://github.com/crowdsecurity/cs-netfilter-blocker
+cd cs-netfilter-blocker/
 make release
-tar xvzf cs-netfilter-blocker.tgz
-cd cs-netfilter-blocker-vX.X.X
 sudo ./install.sh
+systemctl status netfilter-blocker
 ```
 
 
