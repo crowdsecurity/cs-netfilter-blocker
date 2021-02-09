@@ -1,3 +1,5 @@
+:warning: cs-netfilter-blocker is deprecated and you should move to https://github.com/crowdsecurity/cs-firewall-bouncer for versions >= 1.X
+
 <p align="center">
 <img src="https://github.com/crowdsecurity/cs-netfilter-blocker/raw/master/docs/assets/crowdsec_linux_logo.png" alt="CrowdSec" title="CrowdSec" width="280" height="300" />
 </p>
